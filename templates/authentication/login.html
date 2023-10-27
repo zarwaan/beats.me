@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+{% block title %} MusicApp | {{ title }} {% endblock title %}
+{% block header %}
+<style>
+input[type=text], input[type=password]
+    {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 12pt;
+        height: 35px;
+        width: 100%;
+        border-radius: 7.5px;
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+        outline-color: white;
+    }
+    input:focus
+    {
+        background-color: white;
+        color: black;
+        outline: none;
+    }
+    body
+    {
+        background-image: url(https://i.ibb.co/6nfYKVb/headphones.jpg) !important;
+        /* background-image: url("/static/images/bg.jpg") !important; */
+        background-size: cover;
+        opacity: 10;
+    }
+    nav
+    {
+        background-color: #459dfb !important;
+        color: white !important;
+    }
+    strong
+    {
+        color: white !important;
+    }
+
+
+</style>
+{% endblock header %}
+
+{% block body %}
+<script>
+    document.getElementById("home").classList.add("btn-outline-light");
+    document.getElementById("home").classList.remove("btn-outline-dark");
+    document.getElementById("allsongs").classList.add("btn-outline-light");
+    document.getElementById("allsongs").classList.remove("btn-outline-dark");
+    document.getElementById("signin").classList.add("btn-light");
+    document.getElementById("signin").classList.remove("btn-dark");
+    document.getElementById("signup").classList.add("btn-light");
+    document.getElementById("signup").classList.remove("btn-dark");
+</script>
+{% block js %}  {% endblock js %}
+<main role="main" class="container col-12 col-sm-8 col-md-6 col-lg-4 offset-sm-2 offset-md-3 offset-lg-4" 
+              style="margin-left:55%; margin-top:10%; color: white;">
+  <br>
+  <div class="container text-center">
+  <h1 class="text-center">Welcome Back!</h1>
+  <br>
+  <form method="post">
+    {% csrf_token %}
+    <h4>{{ form.as_p }}</h4>
+    <button class="btn btn-primary btn-block" type="submit">Log In</button>
+    <p></p>
+    
+    
+  </form>
+  <!-- <p>Already have an account? Please <a href="{% url 'signup' %}">log in</a>.</p> -->
+  <p>Don't have an account yet? Start your musical journey! <a href="{% url 'signup' %}">Sign Up</a></p>
+  </div>
+</main>
+{% endblock body %}
+

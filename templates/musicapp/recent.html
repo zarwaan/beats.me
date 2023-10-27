@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% load split_filter %}
+{% block title %} Recently Played {% endblock title %}
+
+{% block body %}
+<br>
+<myown>
+<div class="container">
+  <form class="form-horizontal" role="search" method="get" action=''>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group">
+          <input type="text" class="form-control input-lg " name="q" style="border-radius: 5px;"
+          value="{{ request.GET.q }}" placeholder= "Search Songs "/>               
+          <span class='input-group-btn mx-2'>
+            <button type="submit" style="border-radius: 5px;" class="btn btn-success">Search</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- <hr> -->
+  {% if not query_search %}
+  <header class="section-heading">
+    <h5 class="section-title">RECENTLY PLAYED</h5>
+  </header>
+  <hr>
+  {% else %}
+  <header class="section-heading">
+    <h5 class="section-title">SEARCH RESULTS</h5>
+  </header>
+  <hr>
+  {% endif %}
+  
+  <!-- Song list -->
+  <div class="row" style="margin-right: 65px;margin-left:-15px;">
+    {% if recent_songs %}
+    {% for song in recent_songs %}
+    <div class="col-sm-2 col-md-2" style="padding-bottom: 15px;">
+      <div class="hovereffect">
+        <img src="{{ song.song_img.url}}" class="img-responsive" height="135" width="135"
+          style="border-radius: 8px 8px 8px 8px;">
+        {{song.name}}
+          <div class="overlay">
+          <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'play_recent_song' song.id %}"><i class="fa fa-play"
+              aria-hidden="true"></i></a>
+          <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'detail' song.id %}"><i class="fa fa-info-circle"
+              aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+<br>
+<br>
+<br>
+
+<footer class="footer">
+  <div class="row player" style="background-color: rgb(121, 217, 121); padding: 10px;">
+    <div class="col-2"><img src="{{last_played.song_img.url}}" height="140" width="140" style="border-radius: 10px 10px 10px 10px;"></div>
+    <div class="col-10" style="color: black; font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif;padding-top: 3.5px;">
+      <div class="row">
+        <div class="col-md-10">
+          <b>Currently playing: <a class="song" style="margin-left: 15px;">{{last_played.name}}</a><br>
+          Album: <a class="album" style="margin-left: 15px;">{{last_played.album}}</a><br>
+          Singer(s):
+          {% with qs_singers=last_played.singer|split_string:"," %}
+          {% for singer in qs_singers %}
+            <a class="artist" style="margin-left: 15px;">
+              <a id="artist" href="{% url 'all_songs' %}?q=&singers={{singer}}">{{singer}}</a>
+            </a>
+            {% if not forloop.last %},{% endif %}
+          {% endfor %}
+        {% endwith %}
+        </b>
+        </div>
+        <div class="col-md-2">
+          <a id="play-next-song-link" href="{% url 'play_next_song' %}" class="btn btn-outline-dark">Next Song</a>
+          
+        </div>
+          </div>
+      {% if first_time %}
+          <audio controls=""  name="media" style="width:100%">
+            <source src="{{last_played.song_file.url}}" type="audio/mpeg" ></audio>
+            {% else %}
+            <audio controls="" autoplay name="media" style="width:100%"><source src="{{last_played.song_file.url}}" type="audio/mpeg" ></audio>
+              {% endif %}
+        </div>
+    </div>
+  </div>
+</footer>
+</myown>
+
+{% endblock body %}
